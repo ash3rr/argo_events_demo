@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata: # this isn't needed if we are only communicating within the cluster
+  labels:
+    app: argo
+  name: argo-webhook-ingress
+  namespace: argo
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "TCP"
+    #nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: http://localhost 
+    http:
+      paths:
+      - backend:
+          service:
+            name: webhook-eventsource-svc 
+            port:
+              number: 12000
+        pathType: ImplementationSpecific
